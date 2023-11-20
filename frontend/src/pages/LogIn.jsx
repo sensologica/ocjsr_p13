@@ -1,22 +1,10 @@
-export default function SignIn() {
+import { Link } from "react-router-dom"
+import MainNav from "../components/MainNav"
+
+export default function LogIn() {
   return (
     <>
-      <nav className="main-nav">
-        <a className="main-nav-logo" href="/">
-          <img
-            className="main-nav-logo-image"
-            src="./img/argentBankLogo.png"
-            alt="Argent Bank Logo"
-          />
-          <h1 className="sr-only">Argent Bank</h1>
-        </a>
-        <div>
-          <a className="main-nav-item" href="./sign-in">
-            <i className="fa fa-user-circle"></i>
-            Sign In
-          </a>
-        </div>
-      </nav>
+      <MainNav isLoggedIn={false} />
       <main className="main bg-dark">
         <section className="sign-in-content">
           <i className="fa fa-user-circle sign-in-icon"></i>
@@ -35,10 +23,9 @@ export default function SignIn() {
               <label htmlFor="remember-me">Remember me</label>
             </div>
             {/* <!-- PLACEHOLDER DUE TO STATIC SITE --> */}
-            <a href="./user" className="sign-in-button">Sign In</a>
+            <Link to="/profile" className="sign-in-button">Sign In</Link>
             {/* <!-- SHOULD BE THE BUTTON BELOW --> */}
             {/* <!-- <button className="sign-in-button">Sign In</button> --> */}
-            {/* <!--  --> */}
           </form>
         </section>
       </main>

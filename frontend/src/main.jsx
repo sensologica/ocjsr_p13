@@ -1,14 +1,15 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import React from "react"
+import ReactDOM from "react-dom/client"
 import { 
   createBrowserRouter,
   createRoutesFromElements,
   Route,
   RouterProvider
 } from "react-router-dom"
-import Homepage from './pages/Homepage.jsx'
-import SignIn from './pages/SignIn.jsx'
-import User from './pages/User.jsx'
+import Homepage from "./pages/Home"
+import LogIn from "./pages/LogIn"
+import Profile from "./pages/Profile"
+import RoutingError from "./components/RoutingError"
 import "./main.css"
 
 const router = createBrowserRouter(
@@ -17,19 +18,20 @@ const router = createBrowserRouter(
       <Route 
         path="/"
         element={<Homepage />}
-        // errorElement={<RoutingError />}
+        errorElement={<RoutingError />}
       />
       <Route 
-        path="/sign-in"
-        element={<SignIn />}
-        // errorElement={<RoutingError />}
+        path="/login"
+        element={<LogIn />}
+        errorElement={<RoutingError />}
       />
       <Route 
-        path="/user"
-        element={<User />}
-        // errorElement={<RoutingError />}
+        path="/profile"
+        element={<Profile />}
+        errorElement={<RoutingError />}
       />
-      {/* <Route element={<PageLayout />}>
+      {/* 
+      <Route element={<PageLayout />}>
         <Route
           path="/user/:userId"
           element={<Dashboard />}
@@ -43,7 +45,8 @@ const router = createBrowserRouter(
             }
           }
         />
-      </Route> */}
+      </Route>
+      */}
     </>
   )
 )
