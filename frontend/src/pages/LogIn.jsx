@@ -1,7 +1,11 @@
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import MainNav from "../components/MainNav"
+import Footer from "../components/Footer"
+import ButtonSubmitForm from "../components/ButtonSubmitForm"
+import handleSubmitForm from "../utils/handleSubmitForm"
 
-export default function LogIn() {
+const LogIn = () => {
+  const navigate = useNavigate()
   return (
     <>
       <MainNav isLoggedIn={false} />
@@ -9,29 +13,26 @@ export default function LogIn() {
         <section className="sign-in-content">
           <i className="fa fa-user-circle sign-in-icon"></i>
           <h1>Sign In</h1>
-          <form>
+          <form onSubmit={(event) => handleSubmitForm(event, navigate)}>
             <div className="input-wrapper">
               <label htmlFor="username">Username</label>
-                <input type="text" id="username" />
+              <input type="text" id="username" />
             </div>
             <div className="input-wrapper">
               <label htmlFor="password">Password</label>
-                <input type="password" id="password" />
+              <input type="password" id="password" />
             </div>
             <div className="input-remember">
               <input type="checkbox" id="remember-me" />
               <label htmlFor="remember-me">Remember me</label>
             </div>
-            {/* <!-- PLACEHOLDER DUE TO STATIC SITE --> */}
-            <Link to="/profile" className="sign-in-button">Sign In</Link>
-            {/* <!-- SHOULD BE THE BUTTON BELOW --> */}
-            {/* <!-- <button className="sign-in-button">Sign In</button> --> */}
+            <ButtonSubmitForm />
           </form>
         </section>
       </main>
-      <footer className="footer">
-        <p className="footer-text">Copyright 2020 Argent Bank</p>
-      </footer>
+      <Footer />
     </>
   )
 }
+
+export default LogIn
