@@ -24,10 +24,10 @@ const validatePassword = (password) => {
  * @param { Object } - An object containing the values of email and password.
  * @return { Boolean } - True if both input values are valid. False otherwise.
  */
-const validateCredentialsFormatting = ({ email, password }) => {
+const validateFormInputs = ({ email, password }) => {
   const emailIsValid = validateEmail(email)
   const passwordIsValid = validatePassword(password)
   return emailIsValid && passwordIsValid
 }
 
-export default validateCredentialsFormatting
+export default validateFormInputs
