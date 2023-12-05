@@ -19,6 +19,8 @@ body {
 
 .bg-dark {
   background-color: #12002b;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 .sr-only {
@@ -53,7 +55,11 @@ body {
 
 .main-nav-item {
   text-decoration: none;
-  margin-right: 0.5rem;
+  margin-right: 1.5rem;
+}
+
+.main-nav-item > i {
+  margin-right: 0.25rem;
 }
 
 .main-nav-item:hover {
@@ -170,7 +176,6 @@ body {
   background-color: white;
   width: 300px;
   margin: 0 auto;
-  margin-top: 3rem;
   padding: 2rem;
 }
 
