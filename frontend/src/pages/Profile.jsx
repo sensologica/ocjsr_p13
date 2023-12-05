@@ -1,14 +1,61 @@
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { editFirstName, editLastName } from "../redux/slices/userInformation"
 import MainNav from "../components/MainNav"
 import Footer from "../components/Footer"
 
-export default function User() {
+const Profile = () => {
+  const dispatch = useDispatch()
+  const userFirstName = useSelector(state => state.userInformation.firstName)
+  const userLastName = useSelector(state => state.userInformation.lastName)
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwt-token")
+
+    if (!token) {
+      // navigate("/login") (This should be handled even before the redirect to profile page.)
+      throw new Error("Authorization error: No token available.")
+    }
+
+    fetch("http://localhost:3001/api/v1/user/profile", {
+      method: "POST",
+      headers: new Headers({
+        "Authorization": `Bearer ${token}`
+      })
+    })
+    .then(response => {
+      if(!response.ok) {
+        throw new Error(
+          `Authorization error: ${response.status} ${response.statusText}`
+        )
+      }
+      if(response.status === 200) {
+        return response.json()
+      }
+    })
+    .then(userData => {
+      console.log(dispatch(editFirstName(userData.body.firstName)))
+      dispatch(editFirstName(userData.body.firstName))
+      dispatch(editLastName(userData.body.lastName))
+    })
+    .catch(error => {
+      console.log(error.message)
+    })
+  }, [dispatch])
+
   return (
     <>
       <MainNav isLoggedIn={true} />
       <main className="main bg-dark">
         <div className="header">
-          <h1>Welcome back<br />Tony Jarvis!</h1>
-          <button className="edit-button">Edit Name</button>
+          <h1>Welcome back<br />{userFirstName} {userLastName}!</h1>
+          <button className="edit-button" onClick={() => {
+              console.log("Modifying name...")
+              // Submit newly entered name to state and write to database
+              // dispatch(first("Christophe2"))
+              // dispatch(last("Tarrault2"))
+            }
+          }>Edit Name</button>
         </div>
         <h2 className="sr-only">Accounts</h2>
         <section className="account">
@@ -46,3 +93,5 @@ export default function User() {
     </>
   )
 }
+
+export default Profile

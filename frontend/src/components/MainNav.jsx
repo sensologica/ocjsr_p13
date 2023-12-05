@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom"
+import { useSelector } from "react-redux"
 
 export default function MainNav({ isLoggedIn }) {
+  const firstName = useSelector(state => state.userInformation.firstName)
+
   return (
     <nav className="main-nav">
       <Link to="/" className="main-nav-logo">
@@ -18,7 +21,7 @@ export default function MainNav({ isLoggedIn }) {
             <>
               <Link to="/profile" className="main-nav-item">
                 <i className="fa fa-user-circle"></i>
-                Tony
+                {firstName}
               </Link>
               <Link to="/" className="main-nav-item">
                 <i className="fa fa-sign-out"></i>

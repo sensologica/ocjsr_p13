@@ -1,6 +1,5 @@
 import validateFormInputs from "./validateFormInputs"
 import requestToken from "./requestToken"
-import requestAuthorization from "./requestAuthorization"
 
 const handleSubmitForm = async (event, navigate) => {
   event.preventDefault()
@@ -11,9 +10,10 @@ const handleSubmitForm = async (event, navigate) => {
   const areInputsValid = validateFormInputs(credentials)
   if (areInputsValid) {  
     const token = await requestToken(credentials)
+    // TODO: Add error handling.
+    // TODO: Make sure the token has been granted and saved before redirecting.
     localStorage.setItem("jwt-token", token)
-    const isAuthorized = await requestAuthorization()
-    if (isAuthorized) navigate("/profile")
+    navigate("/profile")
   } else {
     console.log("ERROR: Improperly formatted inputs.")
   }
