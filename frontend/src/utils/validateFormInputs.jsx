@@ -4,7 +4,7 @@
  * @param { String } email - A email to validate (user's email address).
  * @return { Boolean }
  */
-const validateEmail= (email) => {
+const validateEmail = (email) => {
   const regex = /^[\w\.-]+@[\w\.-]+\.[\w]{2,4}$/g
   return regex.test(email)
 }
@@ -30,4 +30,5 @@ const validateFormInputs = ({ email, password }) => {
   return emailIsValid && passwordIsValid
 }
 
+export { validateEmail, validatePassword }
 export default validateFormInputs
