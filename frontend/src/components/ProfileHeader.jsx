@@ -58,11 +58,38 @@ const ProfileHeader = () => {
     dispatch(editFirstName(newFirstName))
     dispatch(editLastName(newLastName))
     // TODO: Write new name to the database via API call.
+
+    const payload = {
+      firstName: newFirstName,
+      lastName: newLastName
+    }
+
+    writeToDatabase(payload)
+
     setEditModeEnabled(false)
   }
 
   const handleCancel = () => {
     setEditModeEnabled(false)
+  }
+
+  const writeToDatabase = (payload) => {
+    const token = localStorage.getItem("jwt-token")
+
+    fetch("http://localhost:3001/api/v1/user/profile", {
+      method: "PUT",
+      headers: new Headers({
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      }),
+      body: JSON.stringify(payload)
+    })
+    .then(response => {
+      console.log(response)
+    })
+    .catch(error => {
+      console.warn("ERROR:", error)
+    }) 
   }
   
   return (
