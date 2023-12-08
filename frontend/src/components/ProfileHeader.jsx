@@ -8,7 +8,14 @@ import "./ProfileHeader.css"
 
 const ProfileHeader = () => {
   const [editModeEnabled, setEditModeEnabled] = useState(false)
-  const [status, setStatus] = useState("")
+
+  const initialStatusState = {
+    isVisible: false,
+    type: "error", // The two options are: "error" and "success".
+    message: "",
+  }
+
+  const [status, setStatus] = useState(initialStatusState)
 
   const firstNameInput = useRef(null)
   const lastNameInput = useRef(null)
@@ -57,13 +64,11 @@ const ProfileHeader = () => {
 
   const handleSave = () => {
     // Initialize status (removes any previously set status state).
-    setStatus("")
+    setStatus(initialStatusState)
 
     // Store current input values in variables.
     const newFirstName = firstNameInput.current.value
     const newLastName = lastNameInput.current.value
-
-    console.log("NAME:", newFirstName)
 
     // If no changes to input values have been made...
     if (userFirstName === newFirstName && userLastName === newLastName) {
@@ -76,10 +81,13 @@ const ProfileHeader = () => {
     // If one or both inputs are empty...
     if (newFirstName === "" || newLastName === "") {
       // Show an error message.
-      setStatus("The inputs must not be empty.")
+      setStatus({
+        isVisible: true,
+        type: "error",
+        message: "The inputs must not be empty.",
+      })
       return
     }
-
     
     dispatch(editFirstName(newFirstName))
     dispatch(editLastName(newLastName))
@@ -93,6 +101,8 @@ const ProfileHeader = () => {
   }
 
   const handleCancel = () => {
+    // Initialize status (removes any previously set status state).
+    setStatus(initialStatusState)
     setEditModeEnabled(false)
   }
 
@@ -129,7 +139,10 @@ const ProfileHeader = () => {
             <Button text="Save" className="button save-button" onClick={handleSave} />
             <Button text="Cancel" className="button cancel-button" onClick={handleCancel} />
           </div>
-          { status && <StatusToast className="status-toast" text={status} /> }
+          { 
+            status.isVisible &&
+            <StatusToast type={status.type} message={status.message} />
+          }
         </div>
       }    
 
