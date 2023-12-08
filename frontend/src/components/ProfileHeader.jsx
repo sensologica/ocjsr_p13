@@ -4,27 +4,30 @@ import { editFirstName, editLastName } from "../redux/slices/userInformation"
 import TextInput from "../components/TextInput"
 import Button from "../components/Button"
 import StatusToast from "../components/StatusToast"
+import writeToDatabase from "../utils/writeToDatabase"
 import "./ProfileHeader.css"
 
 const ProfileHeader = () => {
-  const [editModeEnabled, setEditModeEnabled] = useState(false)
-
   const initialStatusState = {
     isVisible: false,
-    type: "error", // The two options are: "error" and "success".
+    type: "error", // The two possible options are: "error" and "success".
     message: "",
   }
 
   const [status, setStatus] = useState(initialStatusState)
+  const [editModeEnabled, setEditModeEnabled] = useState(false)
 
   const firstNameInput = useRef(null)
   const lastNameInput = useRef(null)
 
   const dispatch = useDispatch()
+
   const userFirstName = useSelector(state => state.userInformation.firstName)
   const userLastName = useSelector(state => state.userInformation.lastName)
 
   useEffect(() => {
+    // TODO: Move this logic into a separate function in `utils`.
+    
     const token = localStorage.getItem("jwt-token")
 
     if (!token) {
@@ -58,71 +61,73 @@ const ProfileHeader = () => {
     })
   }, [dispatch])
 
-  const handleEdit = () => {
+  const enterEditMode = () => {
     setEditModeEnabled(true)
   }
 
-  const handleSave = () => {
-    // Initialize status (removes any previously set status state).
+  const quitEditMode = () => {
+    setEditModeEnabled(false)
+  }
+
+  /** 
+   * Reinitializes the state of the Status Toast component. This is needed to
+   * remove any state that may have been set previously.
+   */
+  const clearStatus = () => {
     setStatus(initialStatusState)
+  }
+
+  const handleSave = () => {
+    clearStatus()
 
     // Store current input values in variables.
     const newFirstName = firstNameInput.current.value
     const newLastName = lastNameInput.current.value
 
-    // If no changes to input values have been made...
     if (userFirstName === newFirstName && userLastName === newLastName) {
-      // Do not dispatch a write-to-database call to the API and simply exit
-      // edit mode. This is equivalent to user clicking the "Cancel" button.
-      setEditModeEnabled(false)
+      // If no changes to input values have been made...
+      quitEditMode()
       return
-    }
-
-    // If one or both inputs are empty...
-    if (newFirstName === "" || newLastName === "") {
-      // Show an error message.
+    } else if (newFirstName === "" || newLastName === "") {
+      // If one or both inputs are empty, show an error message.
       setStatus({
         isVisible: true,
         type: "error",
         message: "The inputs must not be empty.",
       })
-      return
+    } else {
+      // Dispatch action to update the Redux store.
+      dispatch(editFirstName(newFirstName))
+      dispatch(editLastName(newLastName))
+
+      // Then group the new values into a payload and make a call to the API to
+      // write data to the database.
+      writeToDatabase({
+        firstName: newFirstName,
+        lastName: newLastName,
+      })
+
+      quitEditMode()
     }
-    
-    dispatch(editFirstName(newFirstName))
-    dispatch(editLastName(newLastName))
-
-    writeToDatabase({
-      firstName: newFirstName,
-      lastName: newLastName,
-    })
-
-    setEditModeEnabled(false)
   }
 
   const handleCancel = () => {
-    // Initialize status (removes any previously set status state).
-    setStatus(initialStatusState)
-    setEditModeEnabled(false)
-  }
+    // The call to `clearStatus()` below is needed to account for the following
+    // scenario:
+    // 
+    // - User enters Edit Mode
+    // - User makes one or both of the inputs empty
+    // - User clicks "Save"
+    // - A Status Toast of type "error" appears
+    // - User clicks "Cancel"
+    // - User enters Edit Mode again
+    // - Problem: The previous status hasn't cleared, even thought the inputs
+    //   are repopulated with non-empty values.
+    //
+    // By clearing status we can avoid this problem.
 
-  const writeToDatabase = (payload) => {
-    const token = localStorage.getItem("jwt-token")
-
-    fetch("http://localhost:3001/api/v1/user/profile", {
-      method: "PUT",
-      headers: new Headers({
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json",
-      }),
-      body: JSON.stringify(payload)
-    })
-    .then(response => {
-      console.log(response)
-    })
-    .catch(error => {
-      console.warn("ERROR:", error)
-    }) 
+    clearStatus()
+    quitEditMode()
   }
   
   return (
@@ -148,7 +153,7 @@ const ProfileHeader = () => {
 
       {
         !editModeEnabled &&
-        <button className="edit-button" onClick={handleEdit}>Edit Name</button>
+        <button className="edit-button" onClick={enterEditMode}>Edit Name</button>
       }
     </div>
   )
