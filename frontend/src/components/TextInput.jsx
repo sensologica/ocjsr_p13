@@ -1,7 +1,8 @@
 import { forwardRef, useState } from "react"
+import "./TextInput.css"
 
 const TextInput = forwardRef(
-  function TextInput({ name, value }, ref) {
+  function TextInput({ name, value, className }, ref) {
     const [newValue, setNewValue] = useState(value)
 
     return (
@@ -10,6 +11,7 @@ const TextInput = forwardRef(
         id={name}
         name={name}
         value={newValue}
+        className={className}
         onChange={(e) => setNewValue(e.target.value)}
         ref={ref}
       />

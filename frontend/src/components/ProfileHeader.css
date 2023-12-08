@@ -1,0 +1,17 @@
+.edit-mode-controls-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.edit-mode-inputs-container {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.edit-mode-buttons-container {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}

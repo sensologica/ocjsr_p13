@@ -1,0 +1,21 @@
+.button {
+  font-weight: bold;
+  padding: 10px;
+  min-width: 80px;
+}
+
+.button:hover {
+  opacity: 0.95;
+}
+
+.save-button {
+  border-color: #00BC77;
+  background-color: #00BC77;
+  color: #FFFFFF;
+}
+
+.cancel-button {
+  border-color: #929292;
+  background-color: #929292;
+  color: #FFFFFF;
+}

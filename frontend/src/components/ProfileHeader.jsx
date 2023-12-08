@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { editFirstName, editLastName } from "../redux/slices/userInformation"
 import TextInput from "../components/TextInput"
 import Button from "../components/Button"
+import "./ProfileHeader.css"
 
 const ProfileHeader = () => {
   const [editModeEnabled, setEditModeEnabled] = useState(false)
@@ -97,13 +98,16 @@ const ProfileHeader = () => {
       <h1>Welcome back<br />{userFirstName} {userLastName}!</h1>
       { 
         editModeEnabled &&
-        <>
-          <TextInput name="first-name" value={userFirstName} ref={firstNameInput} />
-          <TextInput name="last-name" value={userLastName} ref={lastNameInput} />
-          <br />
-          <Button text="Save" className="save-button" onClick={handleSave} />
-          <Button text="Cancel" className="cancel-button" onClick={handleCancel} />
-        </>
+        <div className="edit-mode-controls-container">
+          <div className="edit-mode-inputs-container">
+            <TextInput className="text-input first-name" name="first-name" value={userFirstName} ref={firstNameInput} />
+            <TextInput className="text-input last-name" name="last-name" value={userLastName} ref={lastNameInput} />
+          </div>
+          <div className="edit-mode-buttons-container">
+            <Button text="Save" className="button save-button" onClick={handleSave} />
+            <Button text="Cancel" className="button cancel-button" onClick={handleCancel} />
+          </div>
+        </div>
       }    
       {
         !editModeEnabled &&
