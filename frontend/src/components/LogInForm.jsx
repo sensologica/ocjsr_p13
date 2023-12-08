@@ -19,13 +19,6 @@ const LogInForm = () => {
     password: "",
   })
 
-  // useEffect(() => {
-  //   console.log("------")
-  //   console.log(inputs)
-  //   console.log(errors)
-  //   console.log("------")
-  // })
-
   /**
    * Updates the local state of the form component every time a user types
    * anything into the inputs. This is what allows the inputs to be "controlled"

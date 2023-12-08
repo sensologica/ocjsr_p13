@@ -27,7 +27,7 @@ const ProfileHeader = () => {
 
   useEffect(() => {
     // TODO: Move this logic into a separate function in `utils`.
-    
+
     const token = localStorage.getItem("jwt-token")
 
     if (!token) {
@@ -52,7 +52,6 @@ const ProfileHeader = () => {
       }
     })
     .then(userData => {
-      console.log(dispatch(editFirstName(userData.body.firstName)))
       dispatch(editFirstName(userData.body.firstName))
       dispatch(editLastName(userData.body.lastName))
     })
