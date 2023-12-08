@@ -1,5 +1,5 @@
-import MainNav from "../components/MainNav"
-import Footer from "../components/Footer"
+import MainNav from "../components/MainNav/MainNav"
+import Footer from "../components/Footer/Footer"
 
 export default function Homepage() {
   return (

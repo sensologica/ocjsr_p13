@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import ButtonSubmitForm from "./ButtonSubmitForm"
-import { validateEmail, validatePassword } from "../utils/validateFormInputs"
-import FormInputError from "../components/FormInputError"
-import handleSubmitForm from "../utils/handleSubmitForm"
+import ButtonSubmitForm from "../Buttons/ButtonSubmitForm"
+import { validateEmail, validatePassword } from "../../utils/validateFormInputs"
+import FormInputError from "../Errors/FormInputError/FormInputError"
+import handleSubmitForm from "../../utils/handleSubmitForm"
 
 const LogInForm = () => {
   const navigate = useNavigate()

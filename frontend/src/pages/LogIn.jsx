@@ -1,6 +1,6 @@
-import MainNav from "../components/MainNav"
-import LogInForm from "../components/LogInForm"
-import Footer from "../components/Footer"
+import MainNav from "../components/MainNav/MainNav"
+import LogInForm from "../components/LogInForm/LogInForm"
+import Footer from "../components/Footer/Footer"
 
 const LogIn = () => {
   return (

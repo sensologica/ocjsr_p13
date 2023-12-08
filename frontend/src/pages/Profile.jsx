@@ -1,6 +1,6 @@
-import MainNav from "../components/MainNav"
-import ProfileHeader from "../components/ProfileHeader"
-import Footer from "../components/Footer"
+import MainNav from "../components/MainNav/MainNav"
+import ProfileHeader from "../components/ProfileHeader/ProfileHeader"
+import Footer from "../components/Footer/Footer"
 
 const Profile = () => {
   return (

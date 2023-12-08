@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { editFirstName, editLastName } from "../redux/slices/userInformation"
-import TextInput from "../components/TextInput"
-import Button from "../components/Button"
-import StatusToast from "../components/StatusToast"
-import writeToDatabase from "../utils/writeToDatabase"
+import { editFirstName, editLastName } from "../../redux/slices/userInformation"
+import TextInput from "../TextInput/TextInput"
+import Button from "../Buttons/Button"
+import StatusToast from "../StatusToast/StatusToast"
+import writeToDatabase from "../../utils/writeToDatabase"
 import "./ProfileHeader.css"
 
 const ProfileHeader = () => {

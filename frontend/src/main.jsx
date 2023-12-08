@@ -11,7 +11,7 @@ import { Provider } from "react-redux"
 import Homepage from "./pages/Home"
 import LogIn from "./pages/LogIn"
 import Profile from "./pages/Profile"
-import RoutingError from "./components/RoutingError"
+import RoutingError from "./components/Errors/RoutingError/RoutingError"
 import "./main.css"
 
 const router = createBrowserRouter(
