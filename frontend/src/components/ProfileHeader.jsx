@@ -3,10 +3,12 @@ import { useDispatch, useSelector } from "react-redux"
 import { editFirstName, editLastName } from "../redux/slices/userInformation"
 import TextInput from "../components/TextInput"
 import Button from "../components/Button"
+import StatusToast from "../components/StatusToast"
 import "./ProfileHeader.css"
 
 const ProfileHeader = () => {
   const [editModeEnabled, setEditModeEnabled] = useState(false)
+  const [status, setStatus] = useState("")
 
   const firstNameInput = useRef(null)
   const lastNameInput = useRef(null)
@@ -54,18 +56,38 @@ const ProfileHeader = () => {
   }
 
   const handleSave = () => {
+    // Initialize status (removes any previously set status state).
+    setStatus("")
+
+    // Store current input values in variables.
     const newFirstName = firstNameInput.current.value
     const newLastName = lastNameInput.current.value
-    dispatch(editFirstName(newFirstName))
-    dispatch(editLastName(newLastName))
-    // TODO: Write new name to the database via API call.
 
-    const payload = {
-      firstName: newFirstName,
-      lastName: newLastName
+    console.log("NAME:", newFirstName)
+
+    // If no changes to input values have been made...
+    if (userFirstName === newFirstName && userLastName === newLastName) {
+      // Do not dispatch a write-to-database call to the API and simply exit
+      // edit mode. This is equivalent to user clicking the "Cancel" button.
+      setEditModeEnabled(false)
+      return
     }
 
-    writeToDatabase(payload)
+    // If one or both inputs are empty...
+    if (newFirstName === "" || newLastName === "") {
+      // Show an error message.
+      setStatus("The inputs must not be empty.")
+      return
+    }
+
+    
+    dispatch(editFirstName(newFirstName))
+    dispatch(editLastName(newLastName))
+
+    writeToDatabase({
+      firstName: newFirstName,
+      lastName: newLastName,
+    })
 
     setEditModeEnabled(false)
   }
@@ -107,8 +129,10 @@ const ProfileHeader = () => {
             <Button text="Save" className="button save-button" onClick={handleSave} />
             <Button text="Cancel" className="button cancel-button" onClick={handleCancel} />
           </div>
+          { status && <StatusToast className="status-toast" text={status} /> }
         </div>
       }    
+
       {
         !editModeEnabled &&
         <button className="edit-button" onClick={handleEdit}>Edit Name</button>
