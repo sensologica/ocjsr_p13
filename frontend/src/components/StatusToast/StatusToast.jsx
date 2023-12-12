@@ -1,9 +1,9 @@
 import "./StatusToast.css"
 
-const StatusToast = ({ type, message }) => {
+const StatusToast = ({ status }) => {
   return (
-    <div className={`status-toast${" " + type}`}>
-      {message}
+    <div className={"status-toast" + ` ${status.type}`}>
+      {status.message}
     </div>
   )
 }

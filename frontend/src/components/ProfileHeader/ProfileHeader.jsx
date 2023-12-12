@@ -68,18 +68,23 @@ const ProfileHeader = () => {
     setEditModeEnabled(false)
   }
 
-  /** 
-   * Reinitializes the state of the Status Toast component. This is needed to
-   * remove any state that may have been set previously.
-   */
   const clearStatus = () => {
     setStatus(initialStatusState)
+  }
+
+  const displayStatus = () => {
+    if (status.type === "success") {
+      setTimeout(
+        () => setStatus({...status, isVisible: false}),
+        2500
+      )
+    }
+    return <StatusToast status={status} />
   }
 
   const handleSave = () => {
     clearStatus()
 
-    // Store current input values in variables.
     const newFirstName = firstNameInput.current.value
     const newLastName = lastNameInput.current.value
 
@@ -105,6 +110,16 @@ const ProfileHeader = () => {
         firstName: newFirstName,
         lastName: newLastName,
       })
+      .then(response => {
+        if (response.ok) {
+          // Show a "Success" status toast.
+          setStatus({
+            isVisible: true,
+            type: "success",
+            message: "Save successful.",
+          })
+        }
+      })
 
       quitEditMode()
     }
@@ -128,7 +143,7 @@ const ProfileHeader = () => {
     clearStatus()
     quitEditMode()
   }
-  
+ 
   return (
     <div className="header">
       <h1>Welcome back<br />{userFirstName} {userLastName}!</h1>
@@ -136,24 +151,42 @@ const ProfileHeader = () => {
         editModeEnabled &&
         <div className="edit-mode-controls-container">
           <div className="edit-mode-inputs-container">
-            <TextInput className="text-input first-name" name="first-name" value={userFirstName} ref={firstNameInput} />
-            <TextInput className="text-input last-name" name="last-name" value={userLastName} ref={lastNameInput} />
+            <TextInput
+              className="text-input first-name"
+              name="first-name"
+              value={userFirstName}
+              ref={firstNameInput}
+            />
+            <TextInput
+              className="text-input last-name"
+              name="last-name"
+              value={userLastName}
+              ref={lastNameInput}
+            />
           </div>
           <div className="edit-mode-buttons-container">
-            <Button text="Save" className="button save-button" onClick={handleSave} />
-            <Button text="Cancel" className="button cancel-button" onClick={handleCancel} />
+            <Button
+              text="Save"
+              className="button save-button"
+              onClick={handleSave}
+            />
+            <Button
+              text="Cancel"
+              className="button cancel-button"
+              onClick={handleCancel}
+            />
           </div>
-          { 
-            status.isVisible &&
-            <StatusToast type={status.type} message={status.message} />
-          }
         </div>
       }    
 
       {
         !editModeEnabled &&
-        <button className="edit-button" onClick={enterEditMode}>Edit Name</button>
+        <button className="edit-button" onClick={enterEditMode}>
+          Edit Name
+        </button>
       }
+
+      { status.isVisible && displayStatus() }
     </div>
   )
 }

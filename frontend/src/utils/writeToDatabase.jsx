@@ -10,7 +10,7 @@ const writeToDatabase = (payload) => {
 
   const token = localStorage.getItem("jwt-token")
 
-  fetch("http://localhost:3001/api/v1/user/profile", {
+  return fetch("http://localhost:3001/api/v1/user/profile", {
     method: "PUT",
     headers: new Headers({
       "Authorization": `Bearer ${token}`,
@@ -18,9 +18,7 @@ const writeToDatabase = (payload) => {
     }),
     body: JSON.stringify(payload)
   })
-  .then(response => {
-    console.log(response)
-  })
+  .then(response => response)
   .catch(error => {
     console.warn("ERROR:", error)
   }) 

@@ -1,7 +1,8 @@
 .status-toast {
   border-radius: 4px;
   padding: 4px 16px;
-  margin: 0 auto;
+  margin: 16px auto;
+  width: fit-content;
 }
 
 .status-toast.success {
