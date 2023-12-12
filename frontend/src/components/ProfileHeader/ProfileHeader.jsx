@@ -96,8 +96,8 @@ const ProfileHeader = () => {
       })
     } else {
       // Dispatch action to update the Redux store.
-      dispatch(editFirstName(newFirstName))
-      dispatch(editLastName(newLastName))
+      dispatch(editFirstName(newFirstName.trim()))
+      dispatch(editLastName(newLastName.trim()))
 
       // Then group the new values into a payload and make a call to the API to
       // write data to the database.
