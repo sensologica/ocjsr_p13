@@ -106,8 +106,6 @@ const LogInForm = () => {
       // TODO: Make sure the token has been granted and saved before redirecting.
       localStorage.setItem("jwt-token", token)
       navigate("/profile")
-    } else {
-      console.log("ERROR: Improperly formatted inputs.")
     }
   }
 
