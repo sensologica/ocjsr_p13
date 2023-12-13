@@ -15,7 +15,7 @@ const validateEmail = (email) => {
  * @return { Boolean }
  */
 const validatePassword = (password) => {
-  const regex = /^.{8,64}$/g
+  const regex = /^.{8,}$/g
   return regex.test(password)
 }
 
