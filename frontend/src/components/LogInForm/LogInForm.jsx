@@ -2,6 +2,7 @@ import { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import ButtonSubmitForm from "../Buttons/ButtonSubmitForm"
 import FormInputError from "../Errors/FormInputError/FormInputError"
+import StatusToast from "../StatusToast/StatusToast"
 import requestToken from "../../utils/requestToken"
 
 const LogInForm = () => {
@@ -17,6 +18,14 @@ const LogInForm = () => {
     username: "",
     password: "",
   })
+
+  const initialStatusState = {
+    isVisible: false,
+    type: "error", // The two possible options are: "error" and "success".
+    message: "",
+  }
+
+  const [status, setStatus] = useState(initialStatusState)
 
   const usernameInput = useRef(null)
   const passwordInput = useRef(null)
@@ -102,10 +111,18 @@ const LogInForm = () => {
 
     if (usernameIsValid && passwordIsValid) {
       const token = await requestToken(credentials)
-      // TODO: Add error handling.
-      // TODO: Make sure the token has been granted and saved before redirecting.
-      localStorage.setItem("jwt-token", token)
-      navigate("/profile")
+    
+      if (token.error) {
+        setStatus({
+          ...status,
+          isVisible: true,
+          type: "error", // The two possible options are: "error" and "success".
+          message: "Invalid username or password.",
+        })
+      } else {
+        localStorage.setItem("jwt-token", token)
+        navigate("/profile")
+      }
     }
   }
 
@@ -151,6 +168,7 @@ const LogInForm = () => {
         <label htmlFor="remember">Remember me</label>
       </div>
       <ButtonSubmitForm />
+      { status.isVisible && <StatusToast status={status} /> }
     </form>
   )
 }

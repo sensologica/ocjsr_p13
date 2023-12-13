@@ -10,17 +10,19 @@ const requestToken = (credentials) => {
     headers: new Headers({"Content-Type": "application/json"})
   })
   .then(response => {
-    if (!response.ok) throw new Error("Invalid credentials or bad request.")
+    if (!response.ok) throw new Error(`${response.status} ${response.statusText}`)
     return response.json()
   })
-  .then(data => {
-    console.log("SUCCESS: Token obtained.")
-    const token = data.body.token
+  .then(json => {
+    console.log("SUCCESS: Token obtained.", json)
+    const token = json.body.token
     return token
   })
-  .catch(error => {
-    console.log("ERROR: Token request failed.", error.message)
-    return null
+  .catch((error) => {
+    return {
+      error: true,
+      errorMessage: error,
+    }
   })
 }
 
