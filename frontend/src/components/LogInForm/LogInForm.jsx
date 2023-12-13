@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react"
+import { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import ButtonSubmitForm from "../Buttons/ButtonSubmitForm"
-import { validateEmail, validatePassword } from "../../utils/validateFormInputs"
 import FormInputError from "../Errors/FormInputError/FormInputError"
-import handleSubmitForm from "../../utils/handleSubmitForm"
+import requestToken from "../../utils/requestToken"
 
 const LogInForm = () => {
   const navigate = useNavigate()
@@ -19,6 +18,65 @@ const LogInForm = () => {
     password: "",
   })
 
+  const usernameInput = useRef(null)
+  const passwordInput = useRef(null)
+
+  const validateUsername = () => {
+    const username = usernameInput.current.value
+    const regex = /^[\w\.-]+@[\w\.-]+\.[\w]{2,4}$/g
+
+    const isEmpty = username === ""
+    const isValid = regex.test(username)
+
+    if (isEmpty){
+      setErrors(prevState => ({
+        ...prevState,
+        username: "The username must not be empty.",
+      }))
+      return false
+    } else if (!isValid) {
+      setErrors(prevState => ({
+        ...prevState,
+        username: "The username must be a valid email address.",
+      }))
+      return false
+    } else if (isValid) {
+      setErrors(prevState => ({
+        ...prevState,
+        username: "",
+      }))
+      return true
+    }
+  }
+
+  const validatePassword = () => {
+    const password = passwordInput.current.value
+    const regex = /^.{8,}$/g
+
+    const isEmpty = password === ""
+    const isValid = regex.test(password)
+
+    if (isEmpty){
+      setErrors(prevState => ({
+        ...prevState,
+        password: "The password must not be empty."
+      }))
+      return false
+    } else if (!isValid) {
+      setErrors(prevState => ({
+        ...prevState,
+        password: "The password must be at least 8 characters long.",
+      }))
+      return false
+    } else if (isValid) {
+      setErrors(prevState => ({
+        ...prevState,
+        password: "",
+      }))
+      return true
+    }
+  }
+
   /**
    * Updates the local state of the form component every time a user types
    * anything into the inputs. This is what allows the inputs to be "controlled"
@@ -32,64 +90,38 @@ const LogInForm = () => {
     })
   }
 
-  const isUsernameValid = (e) => {
-    const isInputEmpty = !e.target.value
-    const isUsernameValid = validateEmail(e.target.value)
-    
-    if(isInputEmpty || isUsernameValid) {
-      setErrors({
-        ...errors,
-        username: "",
-      })
-    } else if(!isUsernameValid) {
-      setErrors({
-        ...errors,
-        username: "The username must be a valid email address.",
-      })
+  const handleSubmit = async (event, navigate) => {
+    event.preventDefault()
+    const usernameIsValid = validateUsername()
+    const passwordIsValid = validatePassword()
+
+    const credentials = {
+      email: inputs.username,
+      password: inputs.password,
+    }
+
+    if (usernameIsValid && passwordIsValid) {
+      const token = await requestToken(credentials)
+      // TODO: Add error handling.
+      // TODO: Make sure the token has been granted and saved before redirecting.
+      localStorage.setItem("jwt-token", token)
+      navigate("/profile")
+    } else {
+      console.log("ERROR: Improperly formatted inputs.")
     }
   }
-
-  const isPasswordValid = (e) => {
-    const isInputEmpty = !e.target.value
-    const isPasswordValid = validatePassword(e.target.value)
-
-    if(isInputEmpty || isPasswordValid) {
-      setErrors({
-        ...errors,
-        password: "",
-      })
-    } else if (!isPasswordValid) {
-      setErrors({
-        ...errors,
-        password: "The password must be at least 8 characters long.",
-      })
-    }
-  }
-
-
-  // const errorMessages = {
-  //   username: {
-  //     badFormatting: "The username must be a valid email address.",
-  //     notRecognized: "No user is associated with this username.",
-  //     empty: "The username field must not be empty.",
-  //   },
-  //   password: {
-  //     badFormatting: "The password must be at least 8 characters long.",
-  //     incorrect: "The entered password is incorrect.",
-  //     empty: "The password field must not be empty",
-  //   },
-  // }
 
   return (
-    <form onSubmit={(event) => handleSubmitForm(event, navigate)}>
+    <form onSubmit={(event) => handleSubmit(event, navigate)}>
       <div className="input-wrapper">
         <label htmlFor="username">Username</label>
         <input 
           type="text"
           id="username"
           value={inputs.username}
+          ref={usernameInput}
           onChange={(e) => handleChange(e)}
-          onBlur={(e) => isUsernameValid(e)}
+          onBlur={() => validateUsername()}
         />
         <FormInputError
           errorMessage={errors.username}
@@ -102,8 +134,9 @@ const LogInForm = () => {
           type="password"
           id="password"
           value={inputs.password}
+          ref={passwordInput}
           onChange={(e) => handleChange(e)}
-          onBlur={(e) => isPasswordValid(e)}
+          onBlur={() => validatePassword()}
         />
         <FormInputError
           errorMessage={errors.password}
