@@ -1,8 +1,14 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 
 export default function MainNav({ isLoggedIn }) {
+  const navigate = useNavigate()
   const firstName = useSelector(state => state.userInformation.firstName)
+
+  const handleLogOut = () => {
+    localStorage.removeItem("jwt-token")
+    navigate("/")
+  }
 
   return (
     <nav className="main-nav">
@@ -23,7 +29,10 @@ export default function MainNav({ isLoggedIn }) {
                 <i className="fa fa-user-circle"></i>
                 {firstName}
               </Link>
-              <Link to="/" className="main-nav-item">
+              <Link to="#"
+                className="main-nav-item"
+                onClick={handleLogOut}
+              >
                 <i className="fa fa-sign-out"></i>
                 Sign Out
               </Link>
