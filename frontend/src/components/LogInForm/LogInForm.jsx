@@ -111,7 +111,7 @@ const LogInForm = () => {
 
     if (usernameIsValid && passwordIsValid) {
       const token = await requestToken(credentials)
-    
+
       if (token.error) {
         setStatus({
           ...status,
@@ -137,6 +137,7 @@ const LogInForm = () => {
           ref={usernameInput}
           onChange={(e) => handleChange(e)}
           onBlur={() => validateUsername()}
+          autoFocus
         />
         <FormInputError
           errorMessage={errors.username}
