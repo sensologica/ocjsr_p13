@@ -11,6 +11,7 @@ import { Provider } from "react-redux"
 import Homepage from "./pages/Home"
 import LogIn from "./pages/LogIn"
 import Profile from "./pages/Profile"
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute"
 import RoutingError from "./components/Errors/RoutingError/RoutingError"
 import "./main.css"
 
@@ -29,26 +30,13 @@ const router = createBrowserRouter(
       />
       <Route 
         path="/profile"
-        element={<Profile />}
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
         errorElement={<RoutingError />}
       />
-      {/* 
-      <Route element={<PageLayout />}>
-        <Route
-          path="/user/:userId"
-          element={<Dashboard />}
-          errorElement={<RoutingError />}
-          loader={
-            ({ params }) => {
-              const userId = parseInt(params.userId)
-              return isNaN(userId) 
-                ? console.error("Error: Invalid user ID.")
-                : userId
-            }
-          }
-        />
-      </Route>
-      */}
     </>
   )
 )

@@ -30,11 +30,6 @@ const ProfileHeader = () => {
 
     const token = localStorage.getItem("jwt-token")
 
-    if (!token) {
-      // TODO: navigate("/login") (This should be handled even before the redirect to profile page.)
-      throw new Error("Authorization error: No token available.")
-    }
-
     fetch("http://localhost:3001/api/v1/user/profile", {
       method: "POST",
       headers: new Headers({
