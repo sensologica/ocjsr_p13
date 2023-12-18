@@ -1,9 +1,10 @@
 import { Link, useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 
-export default function MainNav({ isLoggedIn }) {
+const MainNav = () => {
   const navigate = useNavigate()
   const firstName = useSelector(state => state.userInformation.firstName)
+  const isAuthorized = !!localStorage.getItem("jwt-token")
 
   const handleLogOut = () => {
     localStorage.removeItem("jwt-token")
@@ -22,7 +23,7 @@ export default function MainNav({ isLoggedIn }) {
       </Link>
       <div>
         { 
-          isLoggedIn 
+          isAuthorized 
           ? 
             <>
               <Link to="/profile" className="main-nav-item">
@@ -47,3 +48,5 @@ export default function MainNav({ isLoggedIn }) {
     </nav>  
   )
 }
+
+export default MainNav

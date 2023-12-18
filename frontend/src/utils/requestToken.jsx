@@ -14,7 +14,6 @@ const requestToken = (credentials) => {
     return response.json()
   })
   .then(json => {
-    console.log("SUCCESS: Token obtained.", json)
     const token = json.body.token
     return token
   })

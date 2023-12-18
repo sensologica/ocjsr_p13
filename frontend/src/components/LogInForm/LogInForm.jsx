@@ -5,6 +5,11 @@ import FormInputError from "../Errors/FormInputError/FormInputError"
 import StatusToast from "../StatusToast/StatusToast"
 import requestToken from "../../utils/requestToken"
 
+import validatePassword from "../../utils/inputValidation/validatePassword"
+import validateUsername from "../../utils/inputValidation/validateUsername"
+import setPasswordError from "../../utils/inputValidation/setPasswordError"
+import setUsernameError from "../../utils/inputValidation/setUsernameError"
+
 const LogInForm = () => {
   const navigate = useNavigate()
 
@@ -29,69 +34,9 @@ const LogInForm = () => {
 
   const usernameInput = useRef(null)
   const passwordInput = useRef(null)
+  const rememberMeInput = useRef(null)
 
-  const validateUsername = () => {
-    const username = usernameInput.current.value
-    const regex = /^[\w\.-]+@[\w\.-]+\.[\w]{2,4}$/g
-
-    const isEmpty = username === ""
-    const isValid = regex.test(username)
-
-    if (isEmpty){
-      setErrors(prevState => ({
-        ...prevState,
-        username: "The username must not be empty.",
-      }))
-      return false
-    } else if (!isValid) {
-      setErrors(prevState => ({
-        ...prevState,
-        username: "The username must be a valid email address.",
-      }))
-      return false
-    } else if (isValid) {
-      setErrors(prevState => ({
-        ...prevState,
-        username: "",
-      }))
-      return true
-    }
-  }
-
-  const validatePassword = () => {
-    const password = passwordInput.current.value
-    const regex = /^.{8,}$/g
-
-    const isEmpty = password === ""
-    const isValid = regex.test(password)
-
-    if (isEmpty){
-      setErrors(prevState => ({
-        ...prevState,
-        password: "The password must not be empty."
-      }))
-      return false
-    } else if (!isValid) {
-      setErrors(prevState => ({
-        ...prevState,
-        password: "The password must be at least 8 characters long.",
-      }))
-      return false
-    } else if (isValid) {
-      setErrors(prevState => ({
-        ...prevState,
-        password: "",
-      }))
-      return true
-    }
-  }
-
-  /**
-   * Updates the local state of the form component every time a user types
-   * anything into the inputs. This is what allows the inputs to be "controlled"
-   * by React.
-   */
-  const handleChange = (e) => {
+  const handleChange = e => {
     setInputs({
       ...inputs,
       [e.target.id]: e.target.value,
@@ -99,17 +44,18 @@ const LogInForm = () => {
     })
   }
 
-  const handleSubmit = async (event, navigate) => {
-    event.preventDefault()
-    const usernameIsValid = validateUsername()
-    const passwordIsValid = validatePassword()
+  const handleSubmit = async e => {
+    e.preventDefault()
+
+    const username = validateUsername(usernameInput.current.value)
+    const password = validatePassword(passwordInput.current.value)
 
     const credentials = {
-      email: inputs.username,
-      password: inputs.password,
+      email: usernameInput.current.value,
+      password: passwordInput.current.value,
     }
 
-    if (usernameIsValid && passwordIsValid) {
+    if (username.isValid && password.isValid) {
       const token = await requestToken(credentials)
 
       if (token.error) {
@@ -127,7 +73,7 @@ const LogInForm = () => {
   }
 
   return (
-    <form onSubmit={(event) => handleSubmit(event, navigate)}>
+    <form onSubmit={e => handleSubmit(e)}>
       <div className="input-wrapper">
         <label htmlFor="username">Username</label>
         <input 
@@ -135,8 +81,11 @@ const LogInForm = () => {
           id="username"
           value={inputs.username}
           ref={usernameInput}
-          onChange={(e) => handleChange(e)}
-          onBlur={() => validateUsername()}
+          onChange={e => handleChange(e)}
+          onBlur={e => {
+            const username = validateUsername(e.target.value)
+            setUsernameError(username, setErrors)
+          }}
           autoFocus
         />
         <FormInputError
@@ -152,7 +101,10 @@ const LogInForm = () => {
           value={inputs.password}
           ref={passwordInput}
           onChange={(e) => handleChange(e)}
-          onBlur={() => validatePassword()}
+          onBlur={e => {
+            const username = validatePassword(e.target.value)
+            setPasswordError(username, setErrors)
+          }}
         />
         <FormInputError
           errorMessage={errors.password}
@@ -164,6 +116,7 @@ const LogInForm = () => {
           type="checkbox"
           id="remember"
           value={inputs.remember}
+          ref={rememberMeInput}
           onChange={(e) => handleChange(e)}
         />
         <label htmlFor="remember">Remember me</label>

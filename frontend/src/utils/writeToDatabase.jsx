@@ -4,10 +4,6 @@
  * @param { Object } payload - Contains new first and last name values.
  */
 const writeToDatabase = (payload) => {
-  // TODO: Handle errors:
-  // - If no token exists.
-  // - If the request to the API fails.
-
   const token = localStorage.getItem("jwt-token")
 
   return fetch("http://localhost:3001/api/v1/user/profile", {

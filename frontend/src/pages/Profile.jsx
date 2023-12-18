@@ -5,7 +5,7 @@ import Footer from "../components/Footer/Footer"
 const Profile = () => {
   return (
     <>
-      <MainNav isLoggedIn={true} />
+      <MainNav />
       <main className="main bg-dark">
         <ProfileHeader />
         <h2 className="sr-only">Accounts</h2>

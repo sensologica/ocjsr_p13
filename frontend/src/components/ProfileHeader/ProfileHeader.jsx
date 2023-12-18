@@ -26,8 +26,6 @@ const ProfileHeader = () => {
   const userLastName = useSelector(state => state.userInformation.lastName)
 
   useEffect(() => {
-    // TODO: Move this logic into a separate function in `utils`.
-
     const token = localStorage.getItem("jwt-token")
 
     fetch("http://localhost:3001/api/v1/user/profile", {
