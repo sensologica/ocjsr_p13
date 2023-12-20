@@ -4,7 +4,6 @@ import ButtonSubmitForm from "../Buttons/ButtonSubmitForm"
 import FormInputError from "../Errors/FormInputError/FormInputError"
 import StatusToast from "../StatusToast/StatusToast"
 import requestToken from "../../utils/requestToken"
-
 import validatePassword from "../../utils/inputValidation/validatePassword"
 import validateUsername from "../../utils/inputValidation/validateUsername"
 import setPasswordError from "../../utils/inputValidation/setPasswordError"
