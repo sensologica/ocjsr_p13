@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { editFirstName, editLastName } from "../../redux/slices/userInformation"
+import {
+  setId,
+  setUsername,
+  setFirstName, 
+  setLastName,
+} from "../../redux/slices/user"
 import TextInput from "../TextInput/TextInput"
 import Button from "../Buttons/Button"
 import StatusToast from "../StatusToast/StatusToast"
@@ -22,8 +27,8 @@ const ProfileHeader = () => {
 
   const dispatch = useDispatch()
 
-  const userFirstName = useSelector(state => state.userInformation.firstName)
-  const userLastName = useSelector(state => state.userInformation.lastName)
+  const userFirstName = useSelector(state => state.user.firstName)
+  const userLastName = useSelector(state => state.user.lastName)
 
   useEffect(() => {
     const token = localStorage.getItem("jwt-token")
@@ -45,8 +50,10 @@ const ProfileHeader = () => {
       }
     })
     .then(userData => {
-      dispatch(editFirstName(userData.body.firstName))
-      dispatch(editLastName(userData.body.lastName))
+      dispatch(setId(userData.body.id))
+      dispatch(setUsername(userData.body.email))
+      dispatch(setFirstName(userData.body.firstName))
+      dispatch(setLastName(userData.body.lastName))
     })
     .catch(error => {
       console.log(error.message)
@@ -94,8 +101,8 @@ const ProfileHeader = () => {
       })
     } else {
       // Dispatch action to update the Redux store.
-      dispatch(editFirstName(newFirstName.trim()))
-      dispatch(editLastName(newLastName.trim()))
+      dispatch(setFirstName(newFirstName.trim()))
+      dispatch(setLastName(newLastName.trim()))
 
       // Then group the new values into a payload and make a call to the API to
       // write data to the database.

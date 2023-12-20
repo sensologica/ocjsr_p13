@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 
 const MainNav = () => {
   const navigate = useNavigate()
-  const firstName = useSelector(state => state.userInformation.firstName)
+  const firstName = useSelector(state => state.user.firstName)
   const isAuthorized = !!localStorage.getItem("jwt-token")
 
   const handleLogOut = () => {
