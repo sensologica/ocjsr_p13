@@ -5,9 +5,11 @@ import FormInputError from "../Errors/FormInputError/FormInputError"
 import StatusToast from "../StatusToast/StatusToast"
 import requestToken from "../../utils/requestToken"
 import validatePassword from "../../utils/inputValidation/validatePassword"
-import validateUsername from "../../utils/inputValidation/validateUsername"
 import setPasswordError from "../../utils/inputValidation/setPasswordError"
+import unsetPasswordError from "../../utils/inputValidation/unsetPasswordError"
+import validateUsername from "../../utils/inputValidation/validateUsername"
 import setUsernameError from "../../utils/inputValidation/setUsernameError"
+import unsetUsernameError from "../../utils/inputValidation/unsetUsernameError"
 
 const LogInForm = () => {
   const navigate = useNavigate()
@@ -36,6 +38,11 @@ const LogInForm = () => {
   const rememberMeInput = useRef(null)
 
   const handleChange = e => {
+    const username = validateUsername(usernameInput.current.value)
+    const password = validatePassword(passwordInput.current.value)
+    if (username.isEmpty) unsetUsernameError(setErrors)
+    if (password.isEmpty) unsetPasswordError(setErrors)
+
     setInputs({
       ...inputs,
       [e.target.id]: e.target.value,
@@ -48,6 +55,9 @@ const LogInForm = () => {
 
     const username = validateUsername(usernameInput.current.value)
     const password = validatePassword(passwordInput.current.value)
+
+    if (username.isEmpty) setUsernameError(username, setErrors)
+    if (password.isEmpty) setPasswordError(password, setErrors)
 
     const credentials = {
       email: usernameInput.current.value,
@@ -83,7 +93,8 @@ const LogInForm = () => {
           onChange={e => handleChange(e)}
           onBlur={e => {
             const username = validateUsername(e.target.value)
-            setUsernameError(username, setErrors)
+            if (username.isEmpty || username.isValid) unsetUsernameError(setErrors)
+            if (!username.isEmpty && !username.isValid) setUsernameError(username, setErrors)
           }}
           autoFocus
         />
@@ -101,8 +112,9 @@ const LogInForm = () => {
           ref={passwordInput}
           onChange={(e) => handleChange(e)}
           onBlur={e => {
-            const username = validatePassword(e.target.value)
-            setPasswordError(username, setErrors)
+            const password = validatePassword(e.target.value)
+            if (password.isEmpty || password.isValid) unsetPasswordError(setErrors)
+            if (!password.isEmpty && !password.isValid) setPasswordError(password, setErrors)
           }}
         />
         <FormInputError
