@@ -1,13 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit"
 
+const initialState = {
+  token: undefined,
+  isAuthorized: false,
+  rememberMe: false,
+}
+
 export const auth = createSlice({
   name: "auth",
-  initialState: {
-    isAuthorized: false,
-    token: undefined,
-    rememberMe: false,
-  },
+  initialState,
   reducers: {
+    reset: () => initialState,
     setIsAuthorized: (state, action) => {
       state.isAuthorized = action.payload
     },
@@ -21,6 +24,7 @@ export const auth = createSlice({
 })
 
 export const {
+  reset,
   setIsAuthorized,
   setToken,
   setRememberMe

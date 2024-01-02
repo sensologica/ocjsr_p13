@@ -1,13 +1,18 @@
 import { Link, useNavigate } from "react-router-dom"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { reset as resetAuthSlice } from "../../redux/slices/auth"
+import { reset as resetUserSlice } from "../../redux/slices/user"
 
 const MainNav = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const firstName = useSelector(state => state.user.firstName)
   const isAuthorized = !!localStorage.getItem("jwt-token")
 
   const handleLogOut = () => {
     localStorage.removeItem("jwt-token")
+    dispatch(resetAuthSlice())
+    dispatch(resetUserSlice())
     navigate("/")
   }
 

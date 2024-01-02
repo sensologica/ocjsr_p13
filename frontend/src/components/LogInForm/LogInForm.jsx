@@ -1,9 +1,17 @@
 import { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
 import ButtonSubmitForm from "../Buttons/ButtonSubmitForm"
 import FormInputError from "../Errors/FormInputError/FormInputError"
 import StatusToast from "../StatusToast/StatusToast"
 import requestToken from "../../utils/requestToken"
+import {
+  setIsAuthorized,
+  setToken,
+  setRememberMe
+} from "../../redux/slices/auth"
+
+// Input validation imports
 import validatePassword from "../../utils/inputValidation/validatePassword"
 import setPasswordError from "../../utils/inputValidation/setPasswordError"
 import unsetPasswordError from "../../utils/inputValidation/unsetPasswordError"
@@ -13,6 +21,8 @@ import unsetUsernameError from "../../utils/inputValidation/unsetUsernameError"
 
 const LogInForm = () => {
   const navigate = useNavigate()
+  
+  const dispatch = useDispatch()
 
   const [inputs, setInputs] = useState({
     username: "",
@@ -76,6 +86,9 @@ const LogInForm = () => {
         })
       } else {
         localStorage.setItem("jwt-token", token)
+        dispatch(setIsAuthorized(true))
+        dispatch(setToken(token))
+        dispatch(setRememberMe(rememberMeInput.current.checked))
         navigate("/profile")
       }
     }
