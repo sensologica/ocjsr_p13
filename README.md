@@ -97,7 +97,7 @@ npm run populate-db
 If all went well, the database should now have two users:
 
 | Login          | Password  |
-|----------------|-----------|
+|:---------------|:----------|
 |tony@stark.com  |password123|
 |steve@rogers.com|password456|
 
