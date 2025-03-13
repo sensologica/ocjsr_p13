@@ -38,7 +38,7 @@ _This was project 11 out of 12 that I completed as part of the OpenClassrooms Ja
 
 ### Cloning the repository
 
-Clone [this repository](https://github.com/sensologica/ocjsr_p13). The repository is subdivided into 2 parts: backend and frontend. 
+Clone [this repository](https://github.com/sensologica/argent-bank). The repository is subdivided into 2 parts: backend and frontend. 
 
 ### Prerequisites
 
